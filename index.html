@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#7167e8">
+ <link rel="manifest" href="/JadwalKu/manifest.json">
+<link rel="apple-touch-icon" href="/JadwalKu/icon-192.png">
 <title>JadwalKu - Your Daily Organizer</title>
 <style>
 *{box-sizing:border-box}
@@ -401,5 +403,15 @@ renderAll();
 checkInviteLink();
 setInterval(checkReminders,15000);
 </script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/JadwalKu/service-worker.js")
+      .catch(error => console.log("Service Worker:", error));
+  });
+}
+</script>
+
 </body>
 </html>
