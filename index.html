@@ -1,0 +1,657 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7167e8">
+<title>JadwalKu - Your Daily Organizer</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --primary: #7167e8;
+  --light: #f1efff;
+  --bg: #f7f8fc;
+  --text: #292943;
+  --muted: #9292a8;
+  --white: #ffffff;
+  --border: #ededf4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 17px;
+  border-radius: 11px;
+  font-weight: bold;
+}
+
+.secondary {
+  background: var(--light);
+  color: var(--primary);
+  border: none;
+  padding: 11px 15px;
+  border-radius: 10px;
+}
+
+.full {
+  width: 100%;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  background: white;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary);
+}
+
+/* HALAMAN LOGIN */
+
+.auth {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.auth-card {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 22px;
+  box-shadow: 0 10px 40px #3331;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.auth-card label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* APLIKASI UTAMA */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 245px;
+  background: white;
+  border-right: 1px solid var(--border);
+  padding: 25px 17px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.brand {
+  font-size: 25px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 38px;
+}
+
+.brand small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: normal;
+  margin-top: 4px;
+}
+
+.menu-title {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  margin: 3px 0;
+  border: none;
+  border-radius: 11px;
+  background: transparent;
+  color: #77778d;
+  text-align: left;
+  width: 100%;
+}
+
+.nav.active {
+  background: var(--light);
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+.profile {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.avatar {
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background: #e6e3ff;
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  background: white;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.content {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
+}
+
+.menu-mobile {
+  display: none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:760px) {
+  .sidebar {
+    position: fixed;
+    z-index: 15;
+    top: 0;
+    bottom: 0;
+    left: -260px;
+    transition: .25s;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .menu-mobile {
+    display: block;
+  }
+
+  .topbar {
+    padding: 0 17px;
+  }
+
+  .content {
+    padding: 18px;
+  }
+}
+</style>
+</head>
+  
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">JadwalKu
+      <small>Atur hari, raih mimpi ✨</small>
+    </div>
+
+    <div class="menu-title">MENU UTAMA</div>
+    <button class="nav active" data-page="dashboard">🏠 Dashboard</button>
+    <button class="nav" data-page="events">📅 Jadwal Kegiatan</button>
+    <button class="nav" data-page="groups">👥 Grup Saya</button>
+    <button class="nav" data-page="reminders">🔔 Pengingat</button>
+
+    <div class="sidebar-bottom">
+      <button class="nav" data-page="settings">⚙️ Pengaturan</button>
+      <div class="profile">
+        <div class="avatar" id="avatar">U</div>
+        <div>
+          <strong id="profileName">Pengguna</strong>
+          <div style="color:#9292a8">Akun JadwalKu</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="secondary menu-mobile" id="menuBtn">☰</button>
+      <strong id="pageTitle">Dashboard</strong>
+      <button class="secondary" onclick="showPage('reminders')">🔔 Pengingat</button>
+    </header>
+
+    <div class="content">
+      <section id="dashboard" class="page">
+        <h2>Halo, <span id="welcomeName">Pengguna</span>! 👋</h2>
+        <p class="muted">Siap mengatur kegiatanmu hari ini?</p>
+
+        <div class="stats">
+          <div class="stat"><span>Total Kegiatan</span><h2 id="totalEvents">0</h2></div>
+          <div class="stat"><span>Hari Ini</span><h2 id="todayEvents">0</h2></div>
+          <div class="stat"><span>Grup Saya</span><h2 id="totalGroups">0</h2></div>
+        </div>
+
+        <div class="section-head">
+          <h3>Kegiatan Mendatang</h3>
+          <button class="primary" onclick="showPage('events')">+ Tambah Jadwal</button>
+        </div>
+        <div id="upcomingList"></div>
+      </section>
+
+      <section id="events" class="page hidden">
+        <h2>Jadwal Kegiatan 📅</h2>
+        <p class="muted">Catat semua kegiatan pentingmu.</p>
+
+        <div class="panel">
+          <h3>Tambah Kegiatan</h3>
+          <form id="eventForm">
+            <label>Nama kegiatan</label>
+            <input id="eventName" placeholder="Contoh: Rapat kelompok" required>
+            <label>Tanggal</label>
+            <input id="eventDate" type="date" required>
+            <label>Waktu</label>
+            <input id="eventTime" type="time" required>
+            <label>Lokasi</label>
+            <input id="eventPlace" placeholder="Contoh: Ruang kelas">
+            <label>Grup</label>
+            <select id="eventGroup">
+              <option value="">Pribadi</option>
+            </select>
+            <label>Catatan</label>
+            <textarea id="eventNote" placeholder="Catatan kegiatan..."></textarea>
+            <button class="primary full" type="submit">Simpan Jadwal</button>
+          </form>
+        </div>
+
+        <h3>Daftar Jadwal</h3>
+        <div id="eventList"></div>
+      </section>
+
+      <section id="groups" class="page hidden">
+        <h2>Grup Saya 👥</h2>
+        <p class="muted">Kelola kegiatan bersama orang lain.</p>
+
+        <div class="panel">
+          <h3>Buat Grup Baru</h3>
+          <form id="groupForm">
+            <label>Nama grup</label>
+            <input id="groupName" placeholder="Contoh: Kelompok Seni Budaya" required>
+            <label>Deskripsi</label>
+            <input id="groupDesc" placeholder="Tentang grup ini">
+            <button class="primary full">Buat Grup</button>
+          </form>
+        </div>
+        <div id="groupList"></div>
+      </section>
+
+      <section id="reminders" class="page hidden">
+        <h2>Pengingat 🔔</h2>
+        <p class="muted">Lihat kegiatan yang perlu kamu persiapkan.</p>
+        <div id="reminderList"></div>
+      </section>
+
+      <section id="settings" class="page hidden">
+        <h2>Pengaturan ⚙️</h2>
+        <div class="panel">
+          <label>Nama pengguna</label>
+          <input id="nameInput" placeholder="Masukkan namamu">
+          <button class="primary full" id="saveName">Simpan Nama</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<style>
+.muted { color: var(--muted); line-height: 1.5; }
+.page h2 { margin-top: 8px; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 15px;
+  margin: 25px 0;
+}
+.stat, .panel, .event-card, .group-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  margin-bottom: 15px;
+}
+.stat span { color: var(--muted); font-size: 13px; }
+.stat h2 { color: var(--primary); margin-bottom: 0; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 25px 0 15px;
+}
+.panel { max-width: 650px; }
+.panel label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 13px;
+  font-weight: bold;
+}
+.panel button { margin-top: 17px; }
+.event-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.event-card h3 { margin: 0 0 8px; }
+.event-card p { margin: 4px 0; color: var(--muted); font-size: 13px; }
+.delete-btn {
+  border: none;
+  background: #fff0f0;
+  color: #d44;
+  padding: 9px 12px;
+  border-radius: 9px;
+}
+.group-card h3 { margin-top: 0; }
+.code {
+  background: var(--light);
+  color: var(--primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: bold;
+}
+.empty {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+@media(max-width:600px) {
+  .stats { grid-template-columns: 1fr; }
+  .section-head { align-items: flex-start; flex-direction: column; }
+  .event-card { align-items: flex-start; }
+  .stat { padding: 15px; }
+}
+</style>
+  
+<script>
+const $ = id => document.getElementById(id);
+
+let events = JSON.parse(localStorage.getItem("jk_events") || "[]");
+let groups = JSON.parse(localStorage.getItem("jk_groups") || "[]");
+let userName = localStorage.getItem("jk_name") || "Pengguna";
+
+function saveData() {
+  localStorage.setItem("jk_events", JSON.stringify(events));
+  localStorage.setItem("jk_groups", JSON.stringify(groups));
+}
+
+function showPage(page) {
+  document.querySelectorAll(".page").forEach(section => {
+    section.classList.add("hidden");
+  });
+
+  $(page).classList.remove("hidden");
+
+  document.querySelectorAll(".nav[data-page]").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === page);
+  });
+
+  const titles = {
+    dashboard: "Dashboard",
+    events: "Jadwal Kegiatan",
+    groups: "Grup Saya",
+    reminders: "Pengingat",
+    settings: "Pengaturan"
+  };
+
+  $("pageTitle").textContent = titles[page] || "JadwalKu";
+  $("sidebar").classList.remove("open");
+  renderAll();
+}
+
+function escapeHTML(value) {
+  return String(value || "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function formatDate(date) {
+  return new Date(date + "T00:00:00").toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function renderGroups() {
+  $("groupList").innerHTML = groups.length
+    ? groups.map(group => `
+      <div class="group-card">
+        <h3>${escapeHTML(group.name)}</h3>
+        <p>${escapeHTML(group.desc)}</p>
+        <span class="code">Kode: ${escapeHTML(group.code)}</span>
+        <button class="delete-btn" onclick="deleteGroup('${group.id}')">Hapus</button>
+      </div>
+    `).join("")
+    : '<div class="empty">Belum ada grup. Buat grup pertamamu!</div>';
+
+  $("eventGroup").innerHTML =
+    '<option value="">Pribadi</option>' +
+    groups.map(group =>
+      `<option value="${group.id}">${escapeHTML(group.name)}</option>`
+    ).join("");
+
+  $("totalGroups").textContent = groups.length;
+}
+
+function renderEvents() {
+  const sorted = [...events].sort((a,b) =>
+    (a.date + a.time).localeCompare(b.date + b.time)
+  );
+
+  const html = sorted.length
+    ? sorted.map(event => eventCard(event)).join("")
+    : '<div class="empty">Belum ada jadwal kegiatan.</div>';
+
+  $("eventList").innerHTML = html;
+
+  const upcoming = sorted.filter(event =>
+    event.date >= new Date().toLocaleDateString("en-CA")
+  );
+
+  $("upcomingList").innerHTML = upcoming.length
+    ? upcoming.slice(0,5).map(event => eventCard(event)).join("")
+    : '<div class="empty">Belum ada kegiatan mendatang.</div>';
+
+  $("totalEvents").textContent = events.length;
+  $("todayEvents").textContent = events.filter(event =>
+    event.date === new Date().toLocaleDateString("en-CA")
+  ).length;
+}
+</script>
+  
+<script>
+function eventCard(event) {
+  const group = groups.find(item => item.id === event.groupId);
+  return `
+    <div class="event-card">
+      <div>
+        <h3>${escapeHTML(event.name)}</h3>
+        <p>📅 ${formatDate(event.date)} · ⏰ ${escapeHTML(event.time)}</p>
+        <p>📍 ${escapeHTML(event.place || "Lokasi belum diisi")}</p>
+        <p>👥 ${escapeHTML(group ? group.name : "Pribadi")}</p>
+        ${event.note ? `<p>📝 ${escapeHTML(event.note)}</p>` : ""}
+      </div>
+      <button class="delete-btn" onclick="deleteEvent('${event.id}')">Hapus</button>
+    </div>
+  `;
+}
+
+function renderReminders() {
+  const today = new Date().toLocaleDateString("en-CA");
+  const upcoming = [...events]
+    .filter(event => event.date >= today)
+    .sort((a,b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+  $("reminderList").innerHTML = upcoming.length
+    ? upcoming.map(event => eventCard(event)).join("")
+    : '<div class="empty">Tidak ada pengingat kegiatan mendatang.</div>';
+}
+
+function renderAll() {
+  renderGroups();
+  renderEvents();
+  renderReminders();
+
+  $("welcomeName").textContent = userName;
+  $("profileName").textContent = userName;
+  $("avatar").textContent = userName.charAt(0).toUpperCase();
+  $("nameInput").value = userName;
+}
+
+$("eventForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  events.push({
+    id: String(Date.now()),
+    name: $("eventName").value.trim(),
+    date: $("eventDate").value,
+    time: $("eventTime").value,
+    place: $("eventPlace").value.trim(),
+    groupId: $("eventGroup").value,
+    note: $("eventNote").value.trim()
+  });
+
+  saveData();
+  this.reset();
+  renderAll();
+  showPage("events");
+  alert("Jadwal berhasil disimpan!");
+});
+
+$("groupForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const code = Math.random().toString(36).substring(2,8).toUpperCase();
+
+  groups.push({
+    id: String(Date.now()),
+    name: $("groupName").value.trim(),
+    desc: $("groupDesc").value.trim(),
+    code: code
+  });
+
+  saveData();
+  this.reset();
+  renderAll();
+  alert("Grup berhasil dibuat!");
+});
+
+function deleteEvent(id) {
+  if (!confirm("Yakin ingin menghapus jadwal ini?")) return;
+  events = events.filter(event => event.id !== id);
+  saveData();
+  renderAll();
+}
+
+function deleteGroup(id) {
+  if (!confirm("Yakin ingin menghapus grup ini?")) return;
+  groups = groups.filter(group => group.id !== id);
+  events = events.map(event =>
+    event.groupId === id ? {...event, groupId: ""} : event
+  );
+  saveData();
+  renderAll();
+}
+
+$("saveName").addEventListener("click", () => {
+  const name = $("nameInput").value.trim();
+  if (!name) return alert("Nama tidak boleh kosong.");
+
+  userName = name;
+  localStorage.setItem("jk_name", userName);
+  renderAll();
+  alert("Nama berhasil disimpan!");
+});
+
+document.querySelectorAll(".nav[data-page]").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
+
+$("menuBtn").addEventListener("click", () => {
+  $("sidebar").classList.toggle("open");
+});
+
+renderAll();
+showPage("dashboard");
+</script>
+  
+</body>
+</html>
+
