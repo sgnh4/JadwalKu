@@ -1,16 +1,13 @@
-
 {
-  "id": "/JadwalKu/",
   "name": "JadwalKu - Your Daily Organizer",
   "short_name": "JadwalKu",
-  "description": "Aplikasi untuk mengatur jadwal, kegiatan, grup, dan pengingat.",
+  "description": "Aplikasi jadwal dan pengingat kegiatan",
   "start_url": "/JadwalKu/",
   "scope": "/JadwalKu/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f7f8fc",
+  "background_color": "#f6f5ff",
   "theme_color": "#7167e8",
-  "lang": "id",
   "icons": [
     {
       "src": "/JadwalKu/icon-192.png",
