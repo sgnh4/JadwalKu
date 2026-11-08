@@ -6,662 +6,400 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#7167e8">
 <title>JadwalKu - Your Daily Organizer</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root {
-  --primary: #7167e8;
-  --light: #f1efff;
-  --bg: #f7f8fc;
-  --text: #292943;
-  --muted: #9292a8;
-  --white: #ffffff;
-  --border: #ededf4;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
-
-button, input, textarea, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.primary {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 12px 17px;
-  border-radius: 11px;
-  font-weight: bold;
-}
-
-.secondary {
-  background: var(--light);
-  color: var(--primary);
-  border: none;
-  padding: 11px 15px;
-  border-radius: 10px;
-}
-
-.full {
-  width: 100%;
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  outline: none;
-  background: white;
-}
-
-input:focus, textarea:focus, select:focus {
-  border-color: var(--primary);
-}
-
-/* HALAMAN LOGIN */
-
-.auth {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.auth-card {
-  background: white;
-  width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  border-radius: 22px;
-  box-shadow: 0 10px 40px #3331;
-}
-
-.logo {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--primary);
-}
-
-.auth-card label {
-  display: block;
-  margin: 14px 0 7px;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-/* APLIKASI UTAMA */
-
-.app {
-  display: flex;
-  min-height: 100vh;
-}
-
-.sidebar {
-  width: 245px;
-  background: white;
-  border-right: 1px solid var(--border);
-  padding: 25px 17px;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
-
-.brand {
-  font-size: 25px;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 38px;
-}
-
-.brand small {
-  display: block;
-  font-size: 11px;
-  color: var(--muted);
-  font-weight: normal;
-  margin-top: 4px;
-}
-
-.menu-title {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: bold;
-  margin: 10px;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px;
-  margin: 3px 0;
-  border: none;
-  border-radius: 11px;
-  background: transparent;
-  color: #77778d;
-  text-align: left;
-  width: 100%;
-}
-
-.nav.active {
-  background: var(--light);
-  color: var(--primary);
-  font-weight: bold;
-}
-
-.sidebar-bottom {
-  margin-top: auto;
-}
-
-.profile {
-  border-top: 1px solid var(--border);
-  margin-top: 20px;
-  padding-top: 18px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-size: 13px;
-}
-
-.avatar {
-  width: 37px;
-  height: 37px;
-  border-radius: 50%;
-  background: #e6e3ff;
-  color: var(--primary);
-  display: grid;
-  place-items: center;
-  font-weight: bold;
-}
-
-.main {
-  flex: 1;
-  min-width: 0;
-}
-
-.topbar {
-  background: white;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 30px;
-  border-bottom: 1px solid var(--border);
-}
-
-.content {
-  max-width: 1200px;
-  margin: auto;
-  padding: 30px;
-}
-
-.menu-mobile {
-  display: none;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:760px) {
-  .sidebar {
-    position: fixed;
-    z-index: 15;
-    top: 0;
-    bottom: 0;
-    left: -260px;
-    transition: .25s;
-  }
-
-  .sidebar.open {
-    left: 0;
-  }
-
-  .menu-mobile {
-    display: block;
-  }
-
-  .topbar {
-    padding: 0 17px;
-  }
-
-  .content {
-    padding: 18px;
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f5ff;color:#302d48}
+header{background:linear-gradient(135deg,#7167e8,#a18cf4);color:white;padding:25px 20px 30px;border-radius:0 0 25px 25px}
+header h1{margin:0;font-size:27px}
+header p{margin:8px 0 0;font-size:14px}
+nav{display:flex;gap:8px;padding:14px;overflow-x:auto}
+nav button{border:0;background:white;color:#7167e8;padding:11px 15px;border-radius:12px;white-space:nowrap;font-weight:bold}
+nav button.active{background:#7167e8;color:white}
+main{max-width:760px;margin:auto;padding:8px 15px 35px}
+.page{display:none}
+.page.active{display:block}
+h2{font-size:21px;margin:12px 0 17px}
+h3{margin:4px 0 12px;font-size:17px}
+.card{background:white;padding:17px;border-radius:17px;margin-bottom:15px;box-shadow:0 3px 14px #27205b0c}
+input,textarea,select{display:block;width:100%;padding:12px;margin:8px 0 13px;border:1px solid #e1def3;border-radius:10px;font-size:14px;background:white;color:#302d48}
+textarea{min-height:75px;resize:vertical}
+button{cursor:pointer}
+.primary{width:100%;border:0;border-radius:11px;background:#7167e8;color:white;padding:13px;font-weight:bold}
+.secondary{border:0;border-radius:9px;background:#efedff;color:#6658d5;padding:10px 12px;margin:4px 3px 4px 0;font-weight:bold}
+.danger{background:#ffe9ed;color:#d44b68}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stat{background:#f1efff;border-radius:13px;text-align:center;padding:14px 5px}
+.stat strong{display:block;font-size:23px;color:#7167e8}
+.stat span{font-size:11px;color:#716d83}
+.item{border:1px solid #eeeafa;border-radius:12px;padding:13px;margin:10px 0}
+.item p{font-size:13px;color:#777;line-height:1.5;margin:7px 0}
+.code{font-size:12px;overflow-wrap:anywhere;background:#f3f1ff;padding:10px;border-radius:9px;color:#6658d5}
+.empty{text-align:center;color:#999;padding:20px 8px;font-size:14px}
+.tag{display:inline-block;background:#f0edff;color:#7167e8;padding:5px 9px;border-radius:20px;font-size:11px}
+small{color:#888}
+footer{text-align:center;color:#aaa;font-size:12px;padding:20px}
 </style>
-  <link rel="manifest" href="/JadwalKu/manifest.json">
 </head>
-  
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">JadwalKu
-      <small>Atur hari, raih mimpi ✨</small>
-    </div>
 
-    <div class="menu-title">MENU UTAMA</div>
-    <button class="nav active" data-page="dashboard">🏠 Dashboard</button>
-    <button class="nav" data-page="events">📅 Jadwal Kegiatan</button>
-    <button class="nav" data-page="groups">👥 Grup Saya</button>
-    <button class="nav" data-page="reminders">🔔 Pengingat</button>
+<header>
+<h1>💜 JadwalKu</h1>
+<p>Your Daily Organizer — Atur kegiatanmu dengan mudah!</p>
+</header>
 
-    <div class="sidebar-bottom">
-      <button class="nav" data-page="settings">⚙️ Pengaturan</button>
-      <div class="profile">
-        <div class="avatar" id="avatar">U</div>
-        <div>
-          <strong id="profileName">Pengguna</strong>
-          <div style="color:#9292a8">Akun JadwalKu</div>
-        </div>
-      </div>
-    </div>
-  </aside>
+<nav>
+<button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+<button onclick="showPage('jadwal',this)">📅 Jadwal</button>
+<button onclick="showPage('grup',this)">👥 Grup Saya</button>
+<button onclick="showPage('pengingat',this)">🔔 Pengingat</button>
+<button onclick="showPage('pengaturan',this)">⚙️ Pengaturan</button>
+</nav>
 
-  <main class="main">
-    <header class="topbar">
-      <button class="secondary menu-mobile" id="menuBtn">☰</button>
-      <strong id="pageTitle">Dashboard</strong>
-      <button class="secondary" onclick="showPage('reminders')">🔔 Pengingat</button>
-    </header>
+<main>
 
-    <div class="content">
-      <section id="dashboard" class="page">
-        <h2>Halo, <span id="welcomeName">Pengguna</span>! 👋</h2>
-        <p class="muted">Siap mengatur kegiatanmu hari ini?</p>
-
-        <div class="stats">
-          <div class="stat"><span>Total Kegiatan</span><h2 id="totalEvents">0</h2></div>
-          <div class="stat"><span>Hari Ini</span><h2 id="todayEvents">0</h2></div>
-          <div class="stat"><span>Grup Saya</span><h2 id="totalGroups">0</h2></div>
-        </div>
-
-        <div class="section-head">
-          <h3>Kegiatan Mendatang</h3>
-          <button class="primary" onclick="showPage('events')">+ Tambah Jadwal</button>
-        </div>
-        <div id="upcomingList"></div>
-      </section>
-
-      <section id="events" class="page hidden">
-        <h2>Jadwal Kegiatan 📅</h2>
-        <p class="muted">Catat semua kegiatan pentingmu.</p>
-
-        <div class="panel">
-          <h3>Tambah Kegiatan</h3>
-          <form id="eventForm">
-            <label>Nama kegiatan</label>
-            <input id="eventName" placeholder="Contoh: Rapat kelompok" required>
-            <label>Tanggal</label>
-            <input id="eventDate" type="date" required>
-            <label>Waktu</label>
-            <input id="eventTime" type="time" required>
-            <label>Lokasi</label>
-            <input id="eventPlace" placeholder="Contoh: Ruang kelas">
-            <label>Grup</label>
-            <select id="eventGroup">
-              <option value="">Pribadi</option>
-            </select>
-            <label>Catatan</label>
-            <textarea id="eventNote" placeholder="Catatan kegiatan..."></textarea>
-            <button class="primary full" type="submit">Simpan Jadwal</button>
-          </form>
-        </div>
-
-        <h3>Daftar Jadwal</h3>
-        <div id="eventList"></div>
-      </section>
-
-      <section id="groups" class="page hidden">
-        <h2>Grup Saya 👥</h2>
-        <p class="muted">Kelola kegiatan bersama orang lain.</p>
-
-        <div class="panel">
-          <h3>Buat Grup Baru</h3>
-          <form id="groupForm">
-            <label>Nama grup</label>
-            <input id="groupName" placeholder="Contoh: Kelompok Seni Budaya" required>
-            <label>Deskripsi</label>
-            <input id="groupDesc" placeholder="Tentang grup ini">
-            <button class="primary full">Buat Grup</button>
-          </form>
-        </div>
-        <div id="groupList"></div>
-      </section>
-
-      <section id="reminders" class="page hidden">
-        <h2>Pengingat 🔔</h2>
-        <p class="muted">Lihat kegiatan yang perlu kamu persiapkan.</p>
-        <div id="reminderList"></div>
-      </section>
-
-      <section id="settings" class="page hidden">
-        <h2>Pengaturan ⚙️</h2>
-        <div class="panel">
-          <label>Nama pengguna</label>
-          <input id="nameInput" placeholder="Masukkan namamu">
-          <button class="primary full" id="saveName">Simpan Nama</button>
-        </div>
-      </section>
-    </div>
-  </main>
+<section id="dashboard" class="page active">
+<h2>Halo, <span id="hello">Pengguna</span>! 👋</h2>
+<div class="card">
+<h3>Ringkasan Kegiatan</h3>
+<div class="stats">
+<div class="stat"><strong id="total">0</strong><span>Total jadwal</span></div>
+<div class="stat"><strong id="today">0</strong><span>Hari ini</span></div>
+<div class="stat"><strong id="totalGroup">0</strong><span>Grup</span></div>
 </div>
+</div>
+<div class="card">
+<h3>✨ Jadwal Terdekat</h3>
+<div id="upcoming"></div>
+</div>
+<div class="card">
+<h3>💜 Tentang JadwalKu</h3>
+<p style="font-size:13px;line-height:1.6;color:#777">Satu tempat untuk mengatur jadwal, kegiatan, dan pengingatmu agar tidak ada kegiatan yang terlewat.</p>
+</div>
+</section>
 
-<style>
-.muted { color: var(--muted); line-height: 1.5; }
-.page h2 { margin-top: 8px; }
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 15px;
-  margin: 25px 0;
-}
-.stat, .panel, .event-card, .group-card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  margin-bottom: 15px;
-}
-.stat span { color: var(--muted); font-size: 13px; }
-.stat h2 { color: var(--primary); margin-bottom: 0; }
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin: 25px 0 15px;
-}
-.panel { max-width: 650px; }
-.panel label {
-  display: block;
-  margin: 14px 0 7px;
-  font-size: 13px;
-  font-weight: bold;
-}
-.panel button { margin-top: 17px; }
-.event-card {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-}
-.event-card h3 { margin: 0 0 8px; }
-.event-card p { margin: 4px 0; color: var(--muted); font-size: 13px; }
-.delete-btn {
-  border: none;
-  background: #fff0f0;
-  color: #d44;
-  padding: 9px 12px;
-  border-radius: 9px;
-}
-.group-card h3 { margin-top: 0; }
-.code {
-  background: var(--light);
-  color: var(--primary);
-  padding: 8px 12px;
-  border-radius: 8px;
-  display: inline-block;
-  font-weight: bold;
-}
-.empty {
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  color: var(--muted);
-  text-align: center;
-}
-@media(max-width:600px) {
-  .stats { grid-template-columns: 1fr; }
-  .section-head { align-items: flex-start; flex-direction: column; }
-  .event-card { align-items: flex-start; }
-  .stat { padding: 15px; }
-}
-</style>
-  
+<section id="jadwal" class="page">
+<h2>📅 Jadwal Kegiatan</h2>
+<div class="card">
+<h3>Tambah Jadwal Baru</h3>
+<input id="eventName" placeholder="Nama kegiatan">
+<input id="eventDate" type="date">
+<input id="eventTime" type="time">
+<input id="eventLocation" placeholder="Lokasi kegiatan">
+<select id="eventGroup"><option value="">Tanpa grup</option></select>
+<textarea id="eventNote" placeholder="Catatan kegiatan (opsional)"></textarea>
+<button class="primary" onclick="addEvent()">＋ Simpan Jadwal</button>
+</div>
+<div class="card">
+<h3>Daftar Semua Jadwal</h3>
+<div id="eventList"></div>
+</div>
+</section>
+
+<section id="grup" class="page">
+<h2>👥 Grup Saya</h2>
+<div class="card">
+<h3>✨ Buat Grup Baru</h3>
+<input id="groupName" placeholder="Nama grup">
+<textarea id="groupDesc" placeholder="Deskripsi grup"></textarea>
+<button class="primary" onclick="createGroup()">＋ Buat Grup</button>
+</div>
+<div class="card">
+<h3>🔑 Gabung Grup</h3>
+<p style="font-size:13px;color:#777">Masukkan kode undangan atau buka tautan undangan dari temanmu.</p>
+<input id="joinCode" placeholder="Masukkan kode undangan">
+<button class="primary" onclick="joinGroup()">Gabung Grup</button>
+</div>
+<div class="card">
+<h3>📚 Grup yang Kamu Ikuti</h3>
+<div id="groupList"></div>
+</div>
+</section>
+
+<section id="pengingat" class="page">
+<h2>🔔 Pengingat</h2>
+<div class="card">
+<h3>Jadwal yang Perlu Diingat</h3>
+<p style="font-size:13px;color:#777">Jadwal hari ini dan kegiatan mendatang akan ditampilkan di sini.</p>
+<button class="secondary" onclick="enableNotifications()">Aktifkan notifikasi</button>
+<div id="reminderList"></div>
+</div>
+</section>
+
+<section id="pengaturan" class="page">
+<h2>⚙️ Pengaturan</h2>
+<div class="card">
+<h3>Profil Pengguna</h3>
+<label>Nama pengguna</label>
+<input id="nameInput" placeholder="Masukkan namamu">
+<button class="primary" onclick="saveName()">Simpan Nama</button>
+</div>
+<div class="card">
+<h3>💾 Data JadwalKu</h3>
+<p style="font-size:13px;color:#777;line-height:1.6">Data jadwal dan grup tersimpan di penyimpanan browser HP ini.</p>
+<button class="secondary" onclick="exportData()">Unduh cadangan data</button>
+</div>
+</section>
+
+</main>
+<footer>Made with 💜 JadwalKu</footer>
+
 <script>
 const $ = id => document.getElementById(id);
 
 let events = JSON.parse(localStorage.getItem("jk_events") || "[]");
 let groups = JSON.parse(localStorage.getItem("jk_groups") || "[]");
 let userName = localStorage.getItem("jk_name") || "Pengguna";
+let notified = JSON.parse(localStorage.getItem("jk_notified") || "[]");
 
-function saveData() {
-  localStorage.setItem("jk_events", JSON.stringify(events));
-  localStorage.setItem("jk_groups", JSON.stringify(groups));
+function saveData(){
+ localStorage.setItem("jk_events",JSON.stringify(events));
+ localStorage.setItem("jk_groups",JSON.stringify(groups));
+ localStorage.setItem("jk_name",userName);
+ localStorage.setItem("jk_notified",JSON.stringify(notified));
 }
 
-function showPage(page) {
-  document.querySelectorAll(".page").forEach(section => {
-    section.classList.add("hidden");
-  });
-
-  $(page).classList.remove("hidden");
-
-  document.querySelectorAll(".nav[data-page]").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === page);
-  });
-
-  const titles = {
-    dashboard: "Dashboard",
-    events: "Jadwal Kegiatan",
-    groups: "Grup Saya",
-    reminders: "Pengingat",
-    settings: "Pengaturan"
-  };
-
-  $("pageTitle").textContent = titles[page] || "JadwalKu";
-  $("sidebar").classList.remove("open");
-  renderAll();
+function esc(value){
+ return String(value ?? "").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
 }
 
-function escapeHTML(value) {
-  return String(value || "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
+function showPage(id,button){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ $(id).classList.add("active");
+ if(button) button.classList.add("active");
+ renderAll();
 }
 
-function formatDate(date) {
-  return new Date(date + "T00:00:00").toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
+function dateText(date){
+ if(!date)return "-";
+ return new Date(date+"T00:00:00").toLocaleDateString("id-ID",{
+ day:"numeric",month:"long",year:"numeric"
+ });
 }
 
-function renderGroups() {
-  $("groupList").innerHTML = groups.length
-    ? groups.map(group => `
-      <div class="group-card">
-        <h3>${escapeHTML(group.name)}</h3>
-        <p>${escapeHTML(group.desc)}</p>
-        <span class="code">Kode: ${escapeHTML(group.code)}</span>
-        <button class="delete-btn" onclick="deleteGroup('${group.id}')">Hapus</button>
-      </div>
-    `).join("")
-    : '<div class="empty">Belum ada grup. Buat grup pertamamu!</div>';
-
-  $("eventGroup").innerHTML =
-    '<option value="">Pribadi</option>' +
-    groups.map(group =>
-      `<option value="${group.id}">${escapeHTML(group.name)}</option>`
-    ).join("");
-
-  $("totalGroups").textContent = groups.length;
+function makeCode(group){
+ const data={n:group.name,d:group.desc||""};
+ const bytes=new TextEncoder().encode(JSON.stringify(data));
+ let binary="";
+ bytes.forEach(b=>binary+=String.fromCharCode(b));
+ return "JK-"+btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 }
 
-function renderEvents() {
-  const sorted = [...events].sort((a,b) =>
-    (a.date + a.time).localeCompare(b.date + b.time)
-  );
-
-  const html = sorted.length
-    ? sorted.map(event => eventCard(event)).join("")
-    : '<div class="empty">Belum ada jadwal kegiatan.</div>';
-
-  $("eventList").innerHTML = html;
-
-  const upcoming = sorted.filter(event =>
-    event.date >= new Date().toLocaleDateString("en-CA")
-  );
-
-  $("upcomingList").innerHTML = upcoming.length
-    ? upcoming.slice(0,5).map(event => eventCard(event)).join("")
-    : '<div class="empty">Belum ada kegiatan mendatang.</div>';
-
-  $("totalEvents").textContent = events.length;
-  $("todayEvents").textContent = events.filter(event =>
-    event.date === new Date().toLocaleDateString("en-CA")
-  ).length;
-}
-</script>
-  
-<script>
-function eventCard(event) {
-  const group = groups.find(item => item.id === event.groupId);
-  return `
-    <div class="event-card">
-      <div>
-        <h3>${escapeHTML(event.name)}</h3>
-        <p>📅 ${formatDate(event.date)} · ⏰ ${escapeHTML(event.time)}</p>
-        <p>📍 ${escapeHTML(event.place || "Lokasi belum diisi")}</p>
-        <p>👥 ${escapeHTML(group ? group.name : "Pribadi")}</p>
-        ${event.note ? `<p>📝 ${escapeHTML(event.note)}</p>` : ""}
-      </div>
-      <button class="delete-btn" onclick="deleteEvent('${event.id}')">Hapus</button>
-    </div>
-  `;
+function readCode(code){
+ try{
+  code=code.trim();
+  if(!code.startsWith("JK-"))return null;
+  let raw=code.slice(3).replace(/-/g,"+").replace(/_/g,"/");
+  raw+="=".repeat((4-raw.length%4)%4);
+  const binary=atob(raw);
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+ }catch(e){return null}
 }
 
-function renderReminders() {
-  const today = new Date().toLocaleDateString("en-CA");
-  const upcoming = [...events]
-    .filter(event => event.date >= today)
-    .sort((a,b) => (a.date + a.time).localeCompare(b.date + b.time));
-
-  $("reminderList").innerHTML = upcoming.length
-    ? upcoming.map(event => eventCard(event)).join("")
-    : '<div class="empty">Tidak ada pengingat kegiatan mendatang.</div>';
+function createGroup(){
+ const name=$("groupName").value.trim();
+ const desc=$("groupDesc").value.trim();
+ if(!name){alert("Masukkan nama grup terlebih dahulu.");return}
+ const group={id:Date.now().toString(),name,desc,code:""};
+ group.code=makeCode(group);
+ groups.push(group);
+ saveData();
+ $("groupName").value="";
+ $("groupDesc").value="";
+ renderAll();
+ alert("Grup berhasil dibuat! Bagikan kode undangannya kepada temanmu.");
 }
 
-function renderAll() {
-  renderGroups();
-  renderEvents();
-  renderReminders();
-
-  $("welcomeName").textContent = userName;
-  $("profileName").textContent = userName;
-  $("avatar").textContent = userName.charAt(0).toUpperCase();
-  $("nameInput").value = userName;
+function joinGroup(){
+ const code=$("joinCode").value.trim();
+ const data=readCode(code);
+ if(!data||!data.n){
+  alert("Kode undangan tidak valid. Minta temanmu mengirim kode atau tautan undangan lengkap.");
+  return;
+ }
+ if(groups.some(g=>g.code===code)){
+  alert("Kamu sudah bergabung dengan grup ini.");
+  return;
+ }
+ groups.push({
+  id:Date.now().toString(),
+  name:data.n,
+  desc:data.d||"",
+  code:code,
+  joined:true
+ });
+ saveData();
+ $("joinCode").value="";
+ renderAll();
+ alert("Berhasil bergabung dengan grup "+data.n+"!");
 }
 
-$("eventForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  events.push({
-    id: String(Date.now()),
-    name: $("eventName").value.trim(),
-    date: $("eventDate").value,
-    time: $("eventTime").value,
-    place: $("eventPlace").value.trim(),
-    groupId: $("eventGroup").value,
-    note: $("eventNote").value.trim()
-  });
-
-  saveData();
-  this.reset();
-  renderAll();
-  showPage("events");
-  alert("Jadwal berhasil disimpan!");
-});
-
-$("groupForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const code = Math.random().toString(36).substring(2,8).toUpperCase();
-
-  groups.push({
-    id: String(Date.now()),
-    name: $("groupName").value.trim(),
-    desc: $("groupDesc").value.trim(),
-    code: code
-  });
-
-  saveData();
-  this.reset();
-  renderAll();
-  alert("Grup berhasil dibuat!");
-});
-
-function deleteEvent(id) {
-  if (!confirm("Yakin ingin menghapus jadwal ini?")) return;
-  events = events.filter(event => event.id !== id);
-  saveData();
-  renderAll();
+function shareGroup(id){
+ const group=groups.find(g=>g.id===id);
+ if(!group)return;
+ const link=location.origin+location.pathname+"?join="+encodeURIComponent(group.code);
+ const message="Yuk gabung ke grup "+group.name+" di JadwalKu! 💜\n\nKode undangan:\n"+group.code+"\n\nBuka tautan ini:\n"+link;
+ if(navigator.share){
+  navigator.share({title:"Undangan JadwalKu",text:message,url:link}).catch(()=>{});
+ }else if(navigator.clipboard){
+  navigator.clipboard.writeText(message).then(()=>alert("Undangan berhasil disalin. Silakan kirim kepada temanmu."));
+ }else{
+  prompt("Salin undangan ini:",message);
+ }
 }
 
-function deleteGroup(id) {
-  if (!confirm("Yakin ingin menghapus grup ini?")) return;
-  groups = groups.filter(group => group.id !== id);
-  events = events.map(event =>
-    event.groupId === id ? {...event, groupId: ""} : event
-  );
-  saveData();
-  renderAll();
+function deleteGroup(id){
+ if(!confirm("Yakin ingin menghapus grup ini?"))return;
+ groups=groups.filter(g=>g.id!==id);
+ events=events.map(e=>e.groupId===id?{...e,groupId:""}:e);
+ saveData();
+ renderAll();
 }
 
-$("saveName").addEventListener("click", () => {
-  const name = $("nameInput").value.trim();
-  if (!name) return alert("Nama tidak boleh kosong.");
+function addEvent(){
+ const name=$("eventName").value.trim();
+ const date=$("eventDate").value;
+ const time=$("eventTime").value;
+ if(!name||!date||!time){
+  alert("Isi nama kegiatan, tanggal, dan waktu terlebih dahulu.");
+  return;
+ }
+ events.push({
+  id:Date.now().toString(),
+  name,date,time,
+  location:$("eventLocation").value.trim(),
+  groupId:$("eventGroup").value,
+  note:$("eventNote").value.trim()
+ });
+ saveData();
+ ["eventName","eventDate","eventTime","eventLocation","eventNote"].forEach(id=>$(id).value="");
+ $("eventGroup").value="";
+ renderAll();
+ alert("Jadwal berhasil disimpan!");
+}
 
-  userName = name;
-  localStorage.setItem("jk_name", userName);
-  renderAll();
-  alert("Nama berhasil disimpan!");
-});
+function deleteEvent(id){
+ if(!confirm("Hapus jadwal ini?"))return;
+ events=events.filter(e=>e.id!==id);
+ saveData();
+ renderAll();
+}
 
-document.querySelectorAll(".nav[data-page]").forEach(button => {
-  button.addEventListener("click", () => showPage(button.dataset.page));
-});
+function groupName(id){
+ const g=groups.find(g=>g.id===id);
+ return g?g.name:"Tanpa grup";
+}
 
-$("menuBtn").addEventListener("click", () => {
-  $("sidebar").classList.toggle("open");
-});
+function eventCard(e){
+ return `<div class="item">
+ <strong>${esc(e.name)}</strong>
+ <p>📅 ${dateText(e.date)} · ⏰ ${esc(e.time)}</p>
+ ${e.location?`<p>📍 ${esc(e.location)}</p>`:""}
+ <p>👥 ${esc(groupName(e.groupId))}</p>
+ ${e.note?`<p>📝 ${esc(e.note)}</p>`:""}
+ <button class="secondary danger" onclick="deleteEvent('${e.id}')">Hapus</button>
+ </div>`;
+}
+
+function renderEvents(){
+ const sorted=[...events].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+ $("eventList").innerHTML=sorted.length?sorted.map(eventCard).join():'<div class="empty">Belum ada jadwal. Yuk, tambahkan kegiatanmu!</div>';
+ $("upcoming").innerHTML=sorted.filter(e=>e.date>=todayString()).slice(0,4).map(eventCard).join()||'<div class="empty">Belum ada kegiatan mendatang.</div>';
+ $("total").textContent=events.length;
+ $("today").textContent=events.filter(e=>e.date===todayString()).length;
+ $("reminderList").innerHTML=sorted.filter(e=>e.date>=todayString()).map(eventCard).join()||'<div class="empty">Belum ada pengingat.</div>';
+ $("eventGroup").innerHTML='<option value="">Tanpa grup</option>'+groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
+}
+
+function renderGroups(){
+ $("totalGroup").textContent=groups.length;
+ $("groupList").innerHTML=groups.length?groups.map(g=>`
+ <div class="item">
+ <strong>👥 ${esc(g.name)}</strong>
+ <p>${esc(g.desc||"Tidak ada deskripsi")}</p>
+ ${g.joined?'<span class="tag">Grup yang diikuti</span>':'<span class="tag">Grup milikmu</span>'}
+ <p>Kode undangan:</p>
+ <div class="code">${esc(g.code)}</div>
+ <button class="secondary" onclick="shareGroup('${g.id}')">Bagikan Undangan</button>
+ <button class="secondary danger" onclick="deleteGroup('${g.id}')">Hapus Grup</button>
+ </div>`).join():'<div class="empty">Belum ada grup. Buat grup atau gabung dengan kode undangan!</div>';
+}
+
+function todayString(){
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function renderAll(){
+ $("hello").textContent=userName;
+ $("nameInput").value=userName;
+ renderEvents();
+ renderGroups();
+}
+
+function saveName(){
+ const name=$("nameInput").value.trim();
+ if(!name){alert("Nama tidak boleh kosong.");return}
+ userName=name;
+ saveData();
+ renderAll();
+ alert("Nama berhasil disimpan!");
+}
+
+function enableNotifications(){
+ if(!("Notification" in window)){
+  alert("Browser ini tidak mendukung notifikasi.");
+  return;
+ }
+ Notification.requestPermission().then(permission=>{
+  if(permission==="granted")alert("Notifikasi berhasil diaktifkan. Jadwal akan diperiksa selama JadwalKu terbuka.");
+  else alert("Izin notifikasi belum diberikan.");
+ });
+}
+
+function checkReminders(){
+ if(!("Notification" in window)||Notification.permission!=="granted")return;
+ const now=new Date();
+ events.forEach(e=>{
+  const target=new Date(e.date+"T"+e.time);
+  const diff=target-now;
+  const key=e.id+"-"+e.date+"-"+e.time;
+  if(diff>=0&&diff<=60000&&!notified.includes(key)){
+   new Notification("Pengingat JadwalKu",{body:e.name+" akan segera dimulai!"});
+   notified.push(key);
+   saveData();
+  }
+ });
+}
+
+function exportData(){
+ const backup={events,groups,userName};
+ const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="JadwalKu-backup.json";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+
+function checkInviteLink(){
+ const params=new URLSearchParams(location.search);
+ const code=params.get("join");
+ if(code){
+  $("joinCode").value=code;
+  showPage("grup",document.querySelectorAll("nav button")[2]);
+  history.replaceState({},document.title,location.pathname);
+  alert("Kode undangan ditemukan! Tekan tombol Gabung Grup.");
+ }
+}
 
 renderAll();
-showPage("dashboard");
-</script>
-  
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register(
-      "/JadwalKu/service-worker.js"
-    );
-  });
-}
+checkInviteLink();
+setInterval(checkReminders,15000);
 </script>
 </body>
 </html>
-
