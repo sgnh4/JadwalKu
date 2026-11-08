@@ -247,6 +247,7 @@ input:focus, textarea:focus, select:focus {
   }
 }
 </style>
+  <link rel="manifest" href="/JadwalKu/manifest.json">
 </head>
   
 <body>
@@ -652,6 +653,15 @@ renderAll();
 showPage("dashboard");
 </script>
   
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register(
+      "/JadwalKu/service-worker.js"
+    );
+  });
+}
+</script>
 </body>
 </html>
 
