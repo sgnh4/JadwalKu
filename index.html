@@ -182,11 +182,30 @@ function dateText(date){
 }
 
 function makeCode(group){
- const data={n:group.name,d:group.desc||""};
+ const groupEvents=events
+  .filter(e=>e.groupId===group.id)
+  .map(e=>({
+   name:e.name,
+   date:e.date,
+   time:e.time,
+   location:e.location||"",
+   note:e.note||""
+  }));
+
+ const data={
+  n:group.name,
+  d:group.desc||"",
+  events:groupEvents
+ };
+
  const bytes=new TextEncoder().encode(JSON.stringify(data));
  let binary="";
  bytes.forEach(b=>binary+=String.fromCharCode(b));
- return "JK-"+btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+
+ return "JK-"+btoa(binary)
+  .replace(/\+/g,"-")
+  .replace(/\//g,"_")
+  .replace(/=+$/,"");
 }
 
 function readCode(code){
@@ -214,40 +233,79 @@ function createGroup(){
  renderAll();
  alert("Grup berhasil dibuat! Bagikan kode undangannya kepada temanmu.");
 }
-
 function joinGroup(){
  const code=$("joinCode").value.trim();
  const data=readCode(code);
+
  if(!data||!data.n){
-  alert("Kode undangan tidak valid. Minta temanmu mengirim kode atau tautan undangan lengkap.");
+  alert("Kode undangan tidak valid.");
   return;
  }
+
  if(groups.some(g=>g.code===code)){
   alert("Kamu sudah bergabung dengan grup ini.");
   return;
  }
+
+ const newGroupId=Date.now().toString();
+
  groups.push({
-  id:Date.now().toString(),
+  id:newGroupId,
   name:data.n,
   desc:data.d||"",
   code:code,
   joined:true
  });
+
+ // Salin semua jadwal dari undangan
+ if(Array.isArray(data.events)){
+  data.events.forEach(e=>{
+   if(!e.name||!e.date||!e.time)return;
+
+   events.push({
+    id:Date.now().toString()+Math.random().toString(36).slice(2),
+    name:e.name,
+    date:e.date,
+    time:e.time,
+    location:e.location||"",
+    note:e.note||"",
+    groupId:newGroupId
+   });
+  });
+ }
+
  saveData();
  $("joinCode").value="";
  renderAll();
- alert("Berhasil bergabung dengan grup "+data.n+"!");
+
+ alert("Berhasil bergabung! Jadwal grup juga sudah masuk.");
 }
+
 
 function shareGroup(id){
  const group=groups.find(g=>g.id===id);
  if(!group)return;
- const link=location.origin+location.pathname+"?join="+encodeURIComponent(group.code);
- const message="Yuk gabung ke grup "+group.name+" di JadwalKu! 💜\n\nKode undangan:\n"+group.code+"\n\nBuka tautan ini:\n"+link;
+
+ // Perbarui kode agar jadwal terbaru ikut dibagikan
+ group.code=makeCode(group);
+ saveData();
+
+ const link=location.origin+location.pathname+
+ "?join="+encodeURIComponent(group.code);
+
+ const message=
+ "Yuk gabung ke grup "+group.name+" di JadwalKu! 💜\n\n"+
+ "Kode undangan:\n"+group.code+
+ "\n\nBuka tautan ini:\n"+link;
+
  if(navigator.share){
-  navigator.share({title:"Undangan JadwalKu",text:message,url:link}).catch(()=>{});
+  navigator.share({
+   title:"Undangan JadwalKu",
+   text:message
+  }).catch(()=>{});
  }else if(navigator.clipboard){
-  navigator.clipboard.writeText(message).then(()=>alert("Undangan berhasil disalin. Silakan kirim kepada temanmu."));
+  navigator.clipboard.writeText(message)
+   .then(()=>alert("Undangan dan jadwal berhasil disalin."));
  }else{
   prompt("Salin undangan ini:",message);
  }
