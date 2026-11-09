@@ -5,153 +5,319 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#7167e8">
- <link rel="manifest" href="/JadwalKu/manifest.json">
+<meta name="description" content="JadwalKu - Atur jadwal dan pengingat harianmu.">
+<link rel="manifest" href="/JadwalKu/manifest.json">
 <link rel="apple-touch-icon" href="/JadwalKu/icon-192.png">
 <title>JadwalKu - Your Daily Organizer</title>
+
 <style>
+:root {
+ --primary:#7167e8;
+ --primary-dark:#5c52cf;
+ --bg:#f6f5ff;
+ --card:#ffffff;
+ --text:#292744;
+ --muted:#89879e;
+ --border:#e9e7f5;
+ --danger:#e45c70;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f6f5ff;color:#302d48}
-header{background:linear-gradient(135deg,#7167e8,#a18cf4);color:white;padding:25px 20px 30px;border-radius:0 0 25px 25px}
-header h1{margin:0;font-size:27px}
-header p{margin:8px 0 0;font-size:14px}
-nav{display:flex;gap:8px;padding:14px;overflow-x:auto}
-nav button{border:0;background:white;color:#7167e8;padding:11px 15px;border-radius:12px;white-space:nowrap;font-weight:bold}
-nav button.active{background:#7167e8;color:white}
-main{max-width:760px;margin:auto;padding:8px 15px 35px}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+}
+header{
+ background:linear-gradient(135deg,#7167e8,#9a82ef);
+ color:white;
+ padding:24px 20px;
+ border-radius:0 0 25px 25px;
+}
+header h1{margin:0 0 7px;font-size:25px}
+header p{margin:0;opacity:.9}
+nav{
+ display:flex;
+ gap:8px;
+ padding:12px;
+ overflow-x:auto;
+ background:white;
+ position:sticky;
+ top:0;
+ z-index:5;
+ box-shadow:0 2px 8px #00000008;
+}
+nav button{
+ border:0;
+ background:#f1efff;
+ color:var(--primary);
+ padding:11px 15px;
+ border-radius:12px;
+ white-space:nowrap;
+ font-weight:bold;
+}
+nav button.active{
+ background:var(--primary);
+ color:white;
+}
+main{padding:17px;max-width:750px;margin:auto}
 .page{display:none}
 .page.active{display:block}
-h2{font-size:21px;margin:12px 0 17px}
-h3{margin:4px 0 12px;font-size:17px}
-.card{background:white;padding:17px;border-radius:17px;margin-bottom:15px;box-shadow:0 3px 14px #27205b0c}
-input,textarea,select{display:block;width:100%;padding:12px;margin:8px 0 13px;border:1px solid #e1def3;border-radius:10px;font-size:14px;background:white;color:#302d48}
+.card{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:17px;
+ padding:17px;
+ margin-bottom:15px;
+ box-shadow:0 3px 12px #29274408;
+}
+h2{font-size:20px;margin:5px 0 15px}
+h3{font-size:16px;margin:0 0 10px}
+p{line-height:1.5}
+.muted{color:var(--muted);font-size:13px}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+ margin-bottom:15px;
+}
+.stat{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:16px;
+ padding:17px;
+}
+.stat strong{display:block;font-size:25px;color:var(--primary)}
+.stat span{font-size:13px;color:var(--muted)}
+input,textarea,select{
+ width:100%;
+ padding:13px;
+ border:1px solid var(--border);
+ border-radius:11px;
+ margin:6px 0 13px;
+ font-size:14px;
+ background:white;
+ color:var(--text);
+}
 textarea{min-height:75px;resize:vertical}
-button{cursor:pointer}
-.primary{width:100%;border:0;border-radius:11px;background:#7167e8;color:white;padding:13px;font-weight:bold}
-.secondary{border:0;border-radius:9px;background:#efedff;color:#6658d5;padding:10px 12px;margin:4px 3px 4px 0;font-weight:bold}
-.danger{background:#ffe9ed;color:#d44b68}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.stat{background:#f1efff;border-radius:13px;text-align:center;padding:14px 5px}
-.stat strong{display:block;font-size:23px;color:#7167e8}
-.stat span{font-size:11px;color:#716d83}
-.item{border:1px solid #eeeafa;border-radius:12px;padding:13px;margin:10px 0}
-.item p{font-size:13px;color:#777;line-height:1.5;margin:7px 0}
-.code{font-size:12px;overflow-wrap:anywhere;background:#f3f1ff;padding:10px;border-radius:9px;color:#6658d5}
-.empty{text-align:center;color:#999;padding:20px 8px;font-size:14px}
-.tag{display:inline-block;background:#f0edff;color:#7167e8;padding:5px 9px;border-radius:20px;font-size:11px}
-small{color:#888}
-footer{text-align:center;color:#aaa;font-size:12px;padding:20px}
+label{font-size:13px;font-weight:bold}
+button{
+ cursor:pointer;
+ border:0;
+ border-radius:11px;
+ padding:12px 15px;
+ font-weight:bold;
+}
+.primary{background:var(--primary);color:white}
+.primary:active{background:var(--primary-dark)}
+.secondary{background:#f0efff;color:var(--primary)}
+.danger{background:#fff0f2;color:var(--danger)}
+.full{width:100%}
+.item{
+ border:1px solid var(--border);
+ border-radius:13px;
+ padding:14px;
+ margin:10px 0;
+ overflow-wrap:anywhere;
+}
+.item p{margin:7px 0;font-size:13px}
+.item button{margin:5px 5px 0 0}
+.tag{
+ display:inline-block;
+ background:#f0efff;
+ color:var(--primary);
+ border-radius:20px;
+ padding:5px 9px;
+ font-size:11px;
+ margin:4px 0;
+}
+.empty{
+ text-align:center;
+ color:var(--muted);
+ padding:25px 10px;
+ font-size:14px;
+}
+.code{
+ background:#f5f3ff;
+ border:1px dashed var(--primary);
+ border-radius:10px;
+ padding:12px;
+ overflow-wrap:anywhere;
+ font-size:12px;
+ margin:8px 0;
+}
+hr{border:0;border-top:1px solid var(--border);margin:17px 0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>💜 JadwalKu</h1>
-<p>Your Daily Organizer — Atur kegiatanmu dengan mudah!</p>
+ <h1>JadwalKu ✨</h1>
+ <p id="greeting">Your Daily Organizer</p>
 </header>
 
 <nav>
-<button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
-<button onclick="showPage('jadwal',this)">📅 Jadwal</button>
-<button onclick="showPage('grup',this)">👥 Grup Saya</button>
-<button onclick="showPage('pengingat',this)">🔔 Pengingat</button>
-<button onclick="showPage('pengaturan',this)">⚙️ Pengaturan</button>
+ <button class="active" onclick="showPage('home',this)">Beranda</button>
+ <button onclick="showPage('jadwal',this)">Jadwal</button>
+ <button onclick="showPage('grup',this)">Grup</button>
+ <button onclick="showPage('pengingat',this)">Pengingat</button>
+ <button onclick="showPage('pengaturan',this)">Pengaturan</button>
 </nav>
 
 <main>
 
-<section id="dashboard" class="page active">
-<h2>Halo, <span id="hello">Pengguna</span>! 👋</h2>
-<div class="card">
-<h3>Ringkasan Kegiatan</h3>
-<div class="stats">
-<div class="stat"><strong id="total">0</strong><span>Total jadwal</span></div>
-<div class="stat"><strong id="today">0</strong><span>Hari ini</span></div>
-<div class="stat"><strong id="totalGroup">0</strong><span>Grup</span></div>
-</div>
-</div>
-<div class="card">
-<h3>✨ Jadwal Terdekat</h3>
-<div id="upcoming"></div>
-</div>
-<div class="card">
-<h3>💜 Tentang JadwalKu</h3>
-<p style="font-size:13px;line-height:1.6;color:#777">Satu tempat untuk mengatur jadwal, kegiatan, dan pengingatmu agar tidak ada kegiatan yang terlewat.</p>
-</div>
+<section id="home" class="page active">
+ <h2>Halo, <span id="homeName">Pengguna</span>! 👋</h2>
+ <p class="muted">Yuk, atur kegiatanmu hari ini.</p>
+
+ <div class="stats">
+  <div class="stat">
+   <strong id="totalEvents">0</strong>
+   <span>Total Jadwal</span>
+  </div>
+  <div class="stat">
+   <strong id="todayEvents">0</strong>
+   <span>Jadwal Hari Ini</span>
+  </div>
+  <div class="stat">
+   <strong id="totalGroups">0</strong>
+   <span>Grup Saya</span>
+  </div>
+  <div class="stat">
+   <strong id="upcomingEvents">0</strong>
+   <span>Jadwal Mendatang</span>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>Jadwal Mendatang</h3>
+  <div id="homeList"></div>
+ </div>
 </section>
 
 <section id="jadwal" class="page">
-<h2>📅 Jadwal Kegiatan</h2>
-<div class="card">
-<h3>Tambah Jadwal Baru</h3>
-<input id="eventName" placeholder="Nama kegiatan">
-<input id="eventDate" type="date">
-<input id="eventTime" type="time">
-<input id="eventLocation" placeholder="Lokasi kegiatan">
-<select id="eventGroup"><option value="">Tanpa grup</option></select>
-<textarea id="eventNote" placeholder="Catatan kegiatan (opsional)"></textarea>
-<button class="primary" onclick="addEvent()">＋ Simpan Jadwal</button>
-</div>
-<div class="card">
-<h3>Daftar Semua Jadwal</h3>
-<div id="eventList"></div>
-</div>
+ <h2>Jadwal Kegiatan 📅</h2>
+
+ <div class="card">
+  <h3>Tambah Jadwal Baru</h3>
+
+  <label>Nama kegiatan</label>
+  <input id="eventName" placeholder="Contoh: Belajar Matematika">
+
+  <label>Tanggal</label>
+  <input id="eventDate" type="date">
+
+  <label>Waktu</label>
+  <input id="eventTime" type="time">
+
+  <label>Lokasi</label>
+  <input id="eventLocation" placeholder="Contoh: Rumah">
+
+  <label>Masukkan ke grup</label>
+  <select id="eventGroup">
+   <option value="">Jadwal pribadi</option>
+  </select>
+
+  <label>Catatan</label>
+  <textarea id="eventNote" placeholder="Tambahkan catatan..."></textarea>
+
+  <button class="primary full" onclick="addEvent()">Simpan Jadwal</button>
+ </div>
+
+ <div class="card">
+  <h3>Semua Jadwal</h3>
+  <div id="eventList"></div>
+ </div>
 </section>
 
 <section id="grup" class="page">
-<h2>👥 Grup Saya</h2>
-<div class="card">
-<h3>✨ Buat Grup Baru</h3>
-<input id="groupName" placeholder="Nama grup">
-<textarea id="groupDesc" placeholder="Deskripsi grup"></textarea>
-<button class="primary" onclick="createGroup()">＋ Buat Grup</button>
-</div>
-<div class="card">
-<h3>🔑 Gabung Grup</h3>
-<p style="font-size:13px;color:#777">Masukkan kode undangan atau buka tautan undangan dari temanmu.</p>
-<input id="joinCode" placeholder="Masukkan kode undangan">
-<button class="primary" onclick="joinGroup()">Gabung Grup</button>
-</div>
-<div class="card">
-<h3>📚 Grup yang Kamu Ikuti</h3>
-<div id="groupList"></div>
-</div>
+ <h2>Grup Saya 👥</h2>
+
+ <div class="card">
+  <h3>Buat Grup Baru</h3>
+  <label>Nama grup</label>
+  <input id="groupName" placeholder="Contoh: Kelompok Belajar">
+
+  <label>Deskripsi</label>
+  <textarea id="groupDesc" placeholder="Deskripsi grup..."></textarea>
+
+  <button class="primary full" onclick="createGroup()">Buat Grup</button>
+ </div>
+
+ <div class="card">
+  <h3>Gabung dengan Kode Undangan</h3>
+  <label>Kode undangan</label>
+  <textarea id="joinCode" placeholder="Tempel kode undangan di sini..."></textarea>
+  <button class="primary full" onclick="joinGroup()">Gabung Grup</button>
+ </div>
+
+ <div class="card">
+  <h3>Daftar Grup</h3>
+  <div id="groupList"></div>
+ </div>
 </section>
 
 <section id="pengingat" class="page">
-<h2>🔔 Pengingat</h2>
-<div class="card">
-<h3>Jadwal yang Perlu Diingat</h3>
-<p style="font-size:13px;color:#777">Jadwal hari ini dan kegiatan mendatang akan ditampilkan di sini.</p>
-<button class="secondary" onclick="enableNotifications()">Aktifkan notifikasi</button>
-<div id="reminderList"></div>
-</div>
+ <h2>Pengingat 🔔</h2>
+ <div class="card">
+  <h3>Aktifkan Notifikasi</h3>
+  <p class="muted">Izinkan notifikasi agar JadwalKu dapat mengingatkan kegiatanmu.</p>
+  <button class="primary full" onclick="enableNotifications()">Aktifkan Notifikasi</button>
+ </div>
+ <div class="card">
+  <h3>Daftar Pengingat</h3>
+  <div id="reminderList"></div>
+ </div>
 </section>
 
 <section id="pengaturan" class="page">
-<h2>⚙️ Pengaturan</h2>
-<div class="card">
-<h3>Profil Pengguna</h3>
-<label>Nama pengguna</label>
-<input id="nameInput" placeholder="Masukkan namamu">
-<button class="primary" onclick="saveName()">Simpan Nama</button>
-</div>
-<div class="card">
-<h3>💾 Data JadwalKu</h3>
-<p style="font-size:13px;color:#777;line-height:1.6">Data jadwal dan grup tersimpan di penyimpanan browser HP ini.</p>
-<button class="secondary" onclick="exportData()">Unduh cadangan data</button>
-</div>
+ <h2>Pengaturan ⚙️</h2>
+
+ <div class="card">
+  <h3>Profil Pengguna</h3>
+  <label>Nama kamu</label>
+  <input id="nameInput" placeholder="Masukkan nama">
+  <button class="primary full" onclick="saveName()">Simpan Nama</button>
+ </div>
+
+ <div class="card">
+  <h3>Cadangkan Data</h3>
+  <p class="muted">Simpan salinan jadwal dan grup sebagai file cadangan.</p>
+  <button class="secondary full" onclick="exportData()">Ekspor Data</button>
+  <hr>
+  <label>Impor file cadangan</label>
+  <input type="file" id="importFile" accept=".json,application/json">
+  <button class="secondary full" onclick="importData()">Impor Data</button>
+ </div>
+
+ <div class="card">
+  <h3>Tentang JadwalKu</h3>
+  <p class="muted">JadwalKu membantu kamu mengatur jadwal, kegiatan, grup, dan pengingat dalam satu aplikasi.</p>
+ </div>
 </section>
 
 </main>
-<footer>Made with 💜 JadwalKu</footer>
+
+<footer>JadwalKu © 2026 · Your Daily Organizer</footer>
 
 <script>
 const $ = id => document.getElementById(id);
 
-let events = JSON.parse(localStorage.getItem("jk_events") || "[]");
-let groups = JSON.parse(localStorage.getItem("jk_groups") || "[]");
-let userName = localStorage.getItem("jk_name") || "Pengguna";
-let notified = JSON.parse(localStorage.getItem("jk_notified") || "[]");
+function loadData(key,fallback){
+ try{
+  const value=localStorage.getItem(key);
+  return value?JSON.parse(value):fallback;
+ }catch(error){
+  return fallback;
+ }
+}
+
+let events=loadData("jk_events",[]);
+let groups=loadData("jk_groups",[]);
+let userName=localStorage.getItem("jk_name")||"Pengguna";
+let notified=loadData("jk_notified",[]);
 
 function saveData(){
  localStorage.setItem("jk_events",JSON.stringify(events));
@@ -161,38 +327,122 @@ function saveData(){
 }
 
 function esc(value){
- return String(value ?? "").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- })[c]);
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
 
 function showPage(id,button){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
  $(id).classList.add("active");
- if(button) button.classList.add("active");
+
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(button)button.classList.add("active");
+
  renderAll();
 }
 
-function dateText(date){
- if(!date)return "-";
- return new Date(date+"T00:00:00").toLocaleDateString("id-ID",{
- day:"numeric",month:"long",year:"numeric"
+function todayString(){
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function dateText(value){
+ if(!value)return "-";
+ return new Date(value+"T00:00:00").toLocaleDateString("id-ID",{
+  day:"numeric",month:"long",year:"numeric"
  });
+}
+
+function groupName(id){
+ const g=groups.find(x=>String(x.id)===String(id));
+ return g?g.name:"Jadwal pribadi";
+}
+
+function addEvent(){
+ const name=$("eventName").value.trim();
+ const date=$("eventDate").value;
+ const time=$("eventTime").value;
+
+ if(!name||!date||!time){
+  alert("Isi nama kegiatan, tanggal, dan waktu terlebih dahulu.");
+  return;
+ }
+
+ events.push({
+  id:Date.now().toString()+Math.random().toString(16).slice(2),
+  name,date,time,
+  location:$("eventLocation").value.trim(),
+  groupId:$("eventGroup").value,
+  note:$("eventNote").value.trim()
+ });
+
+ saveData();
+
+ ["eventName","eventDate","eventTime","eventLocation","eventNote"]
+ .forEach(id=>$(id).value="");
+
+ $("eventGroup").value="";
+ renderAll();
+ alert("Jadwal berhasil disimpan!");
+}
+
+function deleteEvent(id){
+ if(!confirm("Yakin ingin menghapus jadwal ini?"))return;
+ events=events.filter(e=>String(e.id)!==String(id));
+ saveData();
+ renderAll();
+}
+
+function eventCard(e){
+ return `<div class="item">
+ <strong>${esc(e.name)}</strong>
+ <p>📅 ${dateText(e.date)} · ⏰ ${esc(e.time)}</p>
+ ${e.location?`<p>📍 ${esc(e.location)}</p>`:""}
+ <span class="tag">${esc(groupName(e.groupId))}</span>
+ ${e.note?`<p>📝 ${esc(e.note)}</p>`:""}
+ <button class="danger" onclick="deleteEvent('${esc(e.id)}')">Hapus</button>
+ </div>`;
+}
+
+function sortedEvents(){
+ return [...events].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+}
+
+function renderEvents(){
+ const sorted=sortedEvents();
+
+ $("eventList").innerHTML=sorted.length
+ ?sorted.map(eventCard).join("")
+ :'<div class="empty">Belum ada jadwal.</div>';
+
+ $("homeList").innerHTML=sorted.filter(e=>e.date>=todayString()).slice(0,4).map(eventCard).join("")
+ ||'<div class="empty">Belum ada jadwal mendatang.</div>';
+
+ $("reminderList").innerHTML=sorted.filter(e=>e.date>=todayString()).map(eventCard).join("")
+ ||'<div class="empty">Belum ada pengingat.</div>';
+
+ $("eventGroup").innerHTML='<option value="">Jadwal pribadi</option>'+
+ groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
+
+ $("totalEvents").textContent=events.length;
+ $("todayEvents").textContent=events.filter(e=>e.date===todayString()).length;
+ $("upcomingEvents").textContent=events.filter(e=>e.date>=todayString()).length;
 }
 
 function makeCode(group){
  const groupEvents=events
-  .filter(e=>e.groupId===group.id)
-  .map(e=>({
-   name:e.name,
-   date:e.date,
-   time:e.time,
-   location:e.location||"",
-   note:e.note||""
-  }));
+ .filter(e=>String(e.groupId)===String(group.id))
+ .map(e=>({
+  name:e.name,
+  date:e.date,
+  time:e.time,
+  location:e.location||"",
+  note:e.note||""
+ }));
 
  const data={
+  version:1,
   n:group.name,
   d:group.desc||"",
   events:groupEvents
@@ -203,206 +453,172 @@ function makeCode(group){
  bytes.forEach(b=>binary+=String.fromCharCode(b));
 
  return "JK-"+btoa(binary)
-  .replace(/\+/g,"-")
-  .replace(/\//g,"_")
-  .replace(/=+$/,"");
+ .replace(/\+/g,"-")
+ .replace(/\//g,"_")
+ .replace(/=+$/,"");
 }
 
 function readCode(code){
  try{
-  code=code.trim();
-  if(!code.startsWith("JK-"))return null;
-  let raw=code.slice(3).replace(/-/g,"+").replace(/_/g,"/");
-  raw+="=".repeat((4-raw.length%4)%4);
-  const binary=atob(raw);
+  let value=String(code).trim().replace(/\s/g,"");
+  if(value.startsWith("JK-"))value=value.slice(3);
+
+  value=value.replace(/-/g,"+").replace(/_/g,"/");
+  while(value.length%4)value+="=";
+
+  const binary=atob(value);
   const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
   return JSON.parse(new TextDecoder().decode(bytes));
- }catch(e){return null}
+ }catch(error){
+  return null;
+ }
 }
 
 function createGroup(){
  const name=$("groupName").value.trim();
  const desc=$("groupDesc").value.trim();
- if(!name){alert("Masukkan nama grup terlebih dahulu.");return}
- const group={id:Date.now().toString(),name,desc,code:""};
- group.code=makeCode(group);
+
+ if(!name){
+  alert("Masukkan nama grup terlebih dahulu.");
+  return;
+ }
+
+ const group={
+  id:Date.now().toString()+Math.random().toString(16).slice(2),
+  name,desc,joined:false,code:""
+ };
+
  groups.push(group);
+ group.code=makeCode(group);
  saveData();
+
  $("groupName").value="";
  $("groupDesc").value="";
+
  renderAll();
- alert("Grup berhasil dibuat! Bagikan kode undangannya kepada temanmu.");
+ alert("Grup berhasil dibuat!");
 }
+
 function joinGroup(){
  const code=$("joinCode").value.trim();
+ if(!code){
+  alert("Masukkan kode undangan terlebih dahulu.");
+  return;
+ }
+
  const data=readCode(code);
 
- if(!data||!data.n){
-  alert("Kode undangan tidak valid.");
+ if(!data||!data.n||!Array.isArray(data.events)){
+  alert("Kode undangan tidak valid atau rusak.");
   return;
  }
 
- if(groups.some(g=>g.code===code)){
-  alert("Kamu sudah bergabung dengan grup ini.");
+ const duplicate=groups.some(g=>g.code===code);
+ if(duplicate){
+  alert("Grup ini sudah pernah kamu ikuti.");
   return;
  }
 
- const newGroupId=Date.now().toString();
-
- groups.push({
-  id:newGroupId,
+ const group={
+  id:Date.now().toString()+Math.random().toString(16).slice(2),
   name:data.n,
   desc:data.d||"",
-  code:code,
-  joined:true
- });
+  joined:true,
+  code:code
+ };
 
- // Salin semua jadwal dari undangan
- if(Array.isArray(data.events)){
-  data.events.forEach(e=>{
-   if(!e.name||!e.date||!e.time)return;
+ groups.push(group);
 
-   events.push({
-    id:Date.now().toString()+Math.random().toString(36).slice(2),
-    name:e.name,
-    date:e.date,
-    time:e.time,
-    location:e.location||"",
-    note:e.note||"",
-    groupId:newGroupId
-   });
+ let imported=0;
+ data.events.forEach(e=>{
+  if(!e.name||!e.date||!e.time)return;
+
+  events.push({
+   id:Date.now().toString()+Math.random().toString(16).slice(2),
+   name:e.name,
+   date:e.date,
+   time:e.time,
+   location:e.location||"",
+   note:e.note||"",
+   groupId:group.id
   });
- }
+  imported++;
+ });
 
  saveData();
  $("joinCode").value="";
  renderAll();
 
- alert("Berhasil bergabung! Jadwal grup juga sudah masuk.");
+ alert("Berhasil bergabung dengan grup "+data.n+"!\n"+imported+" jadwal berhasil diterima.");
 }
 
-
-function shareGroup(id){
- const group=groups.find(g=>g.id===id);
+async function shareGroup(id){
+ const group=groups.find(g=>String(g.id)===String(id));
  if(!group)return;
 
- // Perbarui kode agar jadwal terbaru ikut dibagikan
- group.code=makeCode(group);
+ const code=makeCode(group);
+ group.code=code;
  saveData();
 
- const link=location.origin+location.pathname+
- "?join="+encodeURIComponent(group.code);
+ const count=events.filter(e=>String(e.groupId)===String(group.id)).length;
+ const link=location.origin+location.pathname+"?join="+encodeURIComponent(code);
 
  const message=
- "Yuk gabung ke grup "+group.name+" di JadwalKu! 💜\n\n"+
- "Kode undangan:\n"+group.code+
- "\n\nBuka tautan ini:\n"+link;
+ "Undangan grup JadwalKu\n"+
+ "Nama grup: "+group.name+"\n"+
+ "Jadwal yang dibagikan: "+count+"\n\n"+
+ "Kode undangan:\n"+code+
+ "\n\nLink undangan:\n"+link+
+ "\n\nBuka JadwalKu, lalu masukkan kode undangan untuk bergabung.";
 
- if(navigator.share){
-  navigator.share({
-   title:"Undangan JadwalKu",
-   text:message
-  }).catch(()=>{});
- }else if(navigator.clipboard){
-  navigator.clipboard.writeText(message)
-   .then(()=>alert("Undangan dan jadwal berhasil disalin."));
- }else{
-  prompt("Salin undangan ini:",message);
+ try{
+  if(navigator.share){
+   await navigator.share({title:"Undangan JadwalKu",text:message});
+  }else if(navigator.clipboard&&navigator.clipboard.writeText){
+   await navigator.clipboard.writeText(message);
+   alert("Undangan berhasil disalin. Silakan kirim kepada anggota grup.");
+  }else{
+   prompt("Salin undangan berikut:",message);
+  }
+ }catch(error){
+  if(error.name!=="AbortError"){
+   prompt("Salin kode undangan berikut:",code);
+  }
  }
 }
 
 function deleteGroup(id){
- if(!confirm("Yakin ingin menghapus grup ini?"))return;
- groups=groups.filter(g=>g.id!==id);
- events=events.map(e=>e.groupId===id?{...e,groupId:""}:e);
+ if(!confirm("Hapus grup ini? Jadwal dalam grup juga akan dihapus."))return;
+
+ groups=groups.filter(g=>String(g.id)!==String(id));
+ events=events.filter(e=>String(e.groupId)!==String(id));
  saveData();
  renderAll();
-}
-
-function addEvent(){
- const name=$("eventName").value.trim();
- const date=$("eventDate").value;
- const time=$("eventTime").value;
- if(!name||!date||!time){
-  alert("Isi nama kegiatan, tanggal, dan waktu terlebih dahulu.");
-  return;
- }
- events.push({
-  id:Date.now().toString(),
-  name,date,time,
-  location:$("eventLocation").value.trim(),
-  groupId:$("eventGroup").value,
-  note:$("eventNote").value.trim()
- });
- saveData();
- ["eventName","eventDate","eventTime","eventLocation","eventNote"].forEach(id=>$(id).value="");
- $("eventGroup").value="";
- renderAll();
- alert("Jadwal berhasil disimpan!");
-}
-
-function deleteEvent(id){
- if(!confirm("Hapus jadwal ini?"))return;
- events=events.filter(e=>e.id!==id);
- saveData();
- renderAll();
-}
-
-function groupName(id){
- const g=groups.find(g=>g.id===id);
- return g?g.name:"Tanpa grup";
-}
-
-function eventCard(e){
- return `<div class="item">
- <strong>${esc(e.name)}</strong>
- <p>📅 ${dateText(e.date)} · ⏰ ${esc(e.time)}</p>
- ${e.location?`<p>📍 ${esc(e.location)}</p>`:""}
- <p>👥 ${esc(groupName(e.groupId))}</p>
- ${e.note?`<p>📝 ${esc(e.note)}</p>`:""}
- <button class="secondary danger" onclick="deleteEvent('${e.id}')">Hapus</button>
- </div>`;
-}
-
-function renderEvents(){
- const sorted=[...events].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
- $("eventList").innerHTML=sorted.length?sorted.map(eventCard).join():'<div class="empty">Belum ada jadwal. Yuk, tambahkan kegiatanmu!</div>';
- $("upcoming").innerHTML=sorted.filter(e=>e.date>=todayString()).slice(0,4).map(eventCard).join()||'<div class="empty">Belum ada kegiatan mendatang.</div>';
- $("total").textContent=events.length;
- $("today").textContent=events.filter(e=>e.date===todayString()).length;
- $("reminderList").innerHTML=sorted.filter(e=>e.date>=todayString()).map(eventCard).join()||'<div class="empty">Belum ada pengingat.</div>';
- $("eventGroup").innerHTML='<option value="">Tanpa grup</option>'+groups.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
 }
 
 function renderGroups(){
- $("totalGroup").textContent=groups.length;
- $("groupList").innerHTML=groups.length?groups.map(g=>`
- <div class="item">
- <strong>👥 ${esc(g.name)}</strong>
- <p>${esc(g.desc||"Tidak ada deskripsi")}</p>
- ${g.joined?'<span class="tag">Grup yang diikuti</span>':'<span class="tag">Grup milikmu</span>'}
- <p>Kode undangan:</p>
- <div class="code">${esc(g.code)}</div>
- <button class="secondary" onclick="shareGroup('${g.id}')">Bagikan Undangan</button>
- <button class="secondary danger" onclick="deleteGroup('${g.id}')">Hapus Grup</button>
- </div>`).join():'<div class="empty">Belum ada grup. Buat grup atau gabung dengan kode undangan!</div>';
-}
+ $("totalGroups").textContent=groups.length;
 
-function todayString(){
- const d=new Date();
- return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-}
-
-function renderAll(){
- $("hello").textContent=userName;
- $("nameInput").value=userName;
- renderEvents();
- renderGroups();
+ $("groupList").innerHTML=groups.length?groups.map(g=>{
+  const count=events.filter(e=>String(e.groupId)===String(g.id)).length;
+  return `<div class="item">
+   <strong>👥 ${esc(g.name)}</strong>
+   <p>${esc(g.desc||"Tidak ada deskripsi")}</p>
+   <span class="tag">${g.joined?"Grup yang diikuti":"Grup milikmu"}</span>
+   <p>📅 ${count} jadwal dalam grup</p>
+   <button class="primary" onclick="shareGroup('${esc(g.id)}')">Bagikan Undangan</button>
+   <button class="danger" onclick="deleteGroup('${esc(g.id)}')">Hapus Grup</button>
+  </div>`;
+ }).join("")
+ :'<div class="empty">Belum ada grup.</div>';
 }
 
 function saveName(){
  const name=$("nameInput").value.trim();
- if(!name){alert("Nama tidak boleh kosong.");return}
+ if(!name){
+  alert("Masukkan nama terlebih dahulu.");
+  return;
+ }
  userName=name;
  saveData();
  renderAll();
@@ -414,21 +630,32 @@ function enableNotifications(){
   alert("Browser ini tidak mendukung notifikasi.");
   return;
  }
+
  Notification.requestPermission().then(permission=>{
-  if(permission==="granted")alert("Notifikasi berhasil diaktifkan. Jadwal akan diperiksa selama JadwalKu terbuka.");
-  else alert("Izin notifikasi belum diberikan.");
+  if(permission==="granted"){
+   alert("Notifikasi berhasil diaktifkan!");
+  }else{
+   alert("Izin notifikasi belum diberikan.");
+  }
  });
 }
 
 function checkReminders(){
  if(!("Notification" in window)||Notification.permission!=="granted")return;
+
  const now=new Date();
+
  events.forEach(e=>{
+  if(!e.date||!e.time)return;
+
   const target=new Date(e.date+"T"+e.time);
   const diff=target-now;
   const key=e.id+"-"+e.date+"-"+e.time;
+
   if(diff>=0&&diff<=60000&&!notified.includes(key)){
-   new Notification("Pengingat JadwalKu",{body:e.name+" akan segera dimulai!"});
+   new Notification("Pengingat JadwalKu",{
+    body:e.name+" akan segera dimulai!"
+   });
    notified.push(key);
    saveData();
   }
@@ -446,14 +673,58 @@ function exportData(){
  URL.revokeObjectURL(url);
 }
 
+function importData(){
+ const file=$("importFile").files[0];
+ if(!file){
+  alert("Pilih file cadangan terlebih dahulu.");
+  return;
+ }
+
+ const reader=new FileReader();
+
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(reader.result);
+
+   if(!Array.isArray(data.events)||!Array.isArray(data.groups)){
+    throw new Error("Format file tidak sesuai.");
+   }
+
+   if(!confirm("Impor akan mengganti data JadwalKu saat ini. Lanjutkan?"))return;
+
+   events=data.events;
+   groups=data.groups;
+   userName=data.userName||"Pengguna";
+   saveData();
+   renderAll();
+   alert("Data berhasil diimpor!");
+  }catch(error){
+   alert("File tidak valid atau rusak.");
+  }
+ };
+
+ reader.readAsText(file);
+}
+
+function renderAll(){
+ $("homeName").textContent=userName;
+ $("greeting").textContent="Selamat datang kembali, "+userName+"!";
+ $("nameInput").value=userName;
+
+ renderEvents();
+ renderGroups();
+}
+
 function checkInviteLink(){
  const params=new URLSearchParams(location.search);
  const code=params.get("join");
+
  if(code){
   $("joinCode").value=code;
-  showPage("grup",document.querySelectorAll("nav button")[2]);
+  const button=document.querySelectorAll("nav button")[2];
+  showPage("grup",button);
   history.replaceState({},document.title,location.pathname);
-  alert("Kode undangan ditemukan! Tekan tombol Gabung Grup.");
+  alert("Kode undangan ditemukan. Tekan Gabung Grup untuk menerima jadwal.");
  }
 }
 
@@ -463,11 +734,11 @@ setInterval(checkReminders,15000);
 </script>
 
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/JadwalKu/service-worker.js")
-      .catch(error => console.log("Service Worker:", error));
-  });
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("/JadwalKu/service-worker.js")
+  .catch(error=>console.log("Service Worker:",error));
+ });
 }
 </script>
 
